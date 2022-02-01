@@ -130,3 +130,4 @@ dist
 __pycache__
 .vscode
 .exercism
+.venv
