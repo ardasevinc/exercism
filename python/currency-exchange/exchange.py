@@ -6,7 +6,7 @@ def exchange_money(budget, exchange_rate):
     :return: float - exchanged value of the foreign currency you can receive.
     """
 
-    pass
+    return budget / exchange_rate
 
 
 def get_change(budget, exchanging_value):
@@ -17,7 +17,7 @@ def get_change(budget, exchanging_value):
     :return: float - amount left of your starting currency after exchanging.
     """
 
-    pass
+    return budget - exchanging_value
 
 
 def get_value_of_bills(denomination, number_of_bills):
@@ -28,7 +28,7 @@ def get_value_of_bills(denomination, number_of_bills):
     :return: int - total value of bills you now have.
     """
 
-    pass
+    return denomination * number_of_bills
 
 
 def get_number_of_bills(budget, denomination):
@@ -39,7 +39,17 @@ def get_number_of_bills(budget, denomination):
     :return: int - number of bills after exchanging all your money.
     """
 
-    pass
+    return budget // denomination
+
+
+def actual_exchange_rate(exchange_rate, spread):
+    """
+    :param exchange_rate: float - the unit value of the foreign currency.
+    :param spread: int - percentage that is taken as an exchange fee.
+    :return: float effective exchange rate after spread is applied
+    """
+    spread_decimal = spread / 100
+    return exchange_rate + (exchange_rate * spread_decimal)
 
 
 def exchangeable_value(budget, exchange_rate, spread, denomination):
@@ -51,8 +61,11 @@ def exchangeable_value(budget, exchange_rate, spread, denomination):
     :param denomination: int - the value of a single bill.
     :return: int - maximum value you can get.
     """
-
-    pass
+    effective_exchange_rate = actual_exchange_rate(exchange_rate, spread)
+    value_after_exchange = exchange_money(budget, effective_exchange_rate)
+    num_of_bills = get_number_of_bills(value_after_exchange, denomination)
+    value_of_bills = get_value_of_bills(denomination, num_of_bills)
+    return value_of_bills
 
 
 def non_exchangeable_value(budget, exchange_rate, spread, denomination):
@@ -64,5 +77,9 @@ def non_exchangeable_value(budget, exchange_rate, spread, denomination):
     :param denomination: int - the value of a single bill.
     :return: int non-exchangeable value.
     """
-
-    pass
+    effective_exchange_rate = actual_exchange_rate(exchange_rate, spread)
+    value_after_exchange = exchange_money(budget, effective_exchange_rate)
+    return int(
+        value_after_exchange
+        - exchangeable_value(budget, exchange_rate, spread, denomination)
+    )
