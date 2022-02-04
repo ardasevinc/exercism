@@ -1,3 +1,7 @@
+from ctypes.wintypes import WORD
+from mimetypes import suffix_map
+
+
 def add_prefix_un(word):
     """
 
@@ -8,7 +12,7 @@ def add_prefix_un(word):
     returns a new word with an 'un' prefix.
     """
 
-    pass
+    return "un" + word
 
 
 def make_word_groups(vocab_words):
@@ -22,8 +26,16 @@ def make_word_groups(vocab_words):
     with the prefix  and the words with prefix applied, separated
      by ' :: '.
     """
+    word_group = []
+    sep = " :: "
+    prefix = vocab_words[0]
 
-    pass
+    for s in vocab_words:
+        if s == prefix:
+            word_group.append(s)
+        else:
+            word_group.append(prefix + s)
+    return sep.join(word_group)
 
 
 def remove_suffix_ness(word):
@@ -34,8 +46,12 @@ def remove_suffix_ness(word):
 
     This function takes in a word and returns the base word with `ness` removed.
     """
-
-    pass
+    vowels = ["a", "e", "i", "o", "u"]
+    suffix = "ness"
+    word_root = word.split(suffix)[0]
+    if word_root[-1] in vowels:
+        return word_root[:-1] + "y"
+    return word_root
 
 
 def adjective_to_verb(sentence, index):
@@ -50,5 +66,8 @@ def adjective_to_verb(sentence, index):
     is split apart.  The function should return the extracted
     adjective as a verb.
     """
-
-    pass
+    split_sentence = sentence.split(" ")
+    adjective = split_sentence[index]
+    if adjective[-1] == ".":
+        adjective = adjective[:-1]
+    return adjective + "en"
